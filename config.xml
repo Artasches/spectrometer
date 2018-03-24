@@ -23,9 +23,6 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <plugin name="cordova-plugin-camera-preview" spec="https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git" />
-    <plugin name="cordova-save-image-gallery" spec="0.0.26" />
-    <plugin name="cordova-plugin-camera" spec="^4.0.2" />
-    <engine name="android" spec="^7.0.0" />
     <engine name="browser" spec="^5.0.3" />
+    <engine name="android" spec="^7.0.0" />
 </widget>

@@ -9,15 +9,6 @@
   "installed_plugins": {
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-plugin-camera-preview": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-save-image-gallery": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-plugin-camera": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },
   "dependent_plugins": {}

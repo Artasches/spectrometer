@@ -7,16 +7,7 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-camera-preview": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-save-image-gallery": {
-      "PACKAGE_NAME": "io.cordova.hellocordova"
-    },
-    "cordova-plugin-camera": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },
