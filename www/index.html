@@ -11,7 +11,36 @@
 </head>
 
 <body>
-
+  <div class="body">
+    <div class="controls">
+      <button id="takePicture">Take picture</button>
+      <button id="switchCamera">Switch camera</button>
+      <img id="originalPicture" />
+      <form id="form" class="hidden">
+        <table>
+          <tr>
+            <td>Author</td>
+            <td>
+              <input type="text" name="author">
+            </td>
+          </tr>
+          <tr>
+            <td>Title</td>
+            <td>
+              <input type="text" name="title">
+            </td>
+          </tr>
+          <tr>
+            <td>Description</td>
+            <td>
+              <textarea name="descr" rows="10"></textarea>
+            </td>
+          </tr>
+        </table>
+        <button>Send</button>
+      </form>
+    </div>
+  </div>
 
   <script type="text/javascript" src="./cordova.js"></script>
   <!-- <script type="text/javascript" src="./plugins/cordova-plugin-camera-preview/www/CameraPreview.js"></script> -->

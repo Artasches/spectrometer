@@ -8,3 +8,53 @@ html {
   height: 100%;
   font-size: 18px;
 }
+.body {
+  padding-top: 50vh;
+}
+.controls {
+  padding: 15px;
+  background: #efefef;
+  min-height: 50vh;
+  border-radius: 10px 10px 0 0;
+}
+button {
+  background: #ccc;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  text-align: center;
+  min-width: 180px;
+  display: inline-block;
+  margin: 15px 0;
+}
+button:hover,
+button:focus,
+button:active {
+  background: #999;
+}
+img {
+  width: 100%;
+  margin: 15px 0;
+}
+table {
+  width: 100%;
+}
+table tr td {
+  vertical-align: top;
+}
+input,
+textarea {
+  width: 100%;
+  background: #fff;
+  border: none;
+  border-bottom: 1px solid #999;
+  padding: 5px;
+  display: block;
+  resize: vertical;
+}
+.show {
+  display: block;
+}
+.hidden {
+  display: none;
+}
