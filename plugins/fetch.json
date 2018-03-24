@@ -1,0 +1,34 @@
+{
+  "cordova-plugin-whitelist": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-whitelist@1"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-camera-preview": {
+    "source": {
+      "type": "registry",
+      "id": "https://github.com/cordova-plugin-camera-preview/cordova-plugin-camera-preview.git"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-save-image-gallery": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-save-image-gallery@0.0.26"
+    },
+    "is_top_level": true,
+    "variables": {}
+  },
+  "cordova-plugin-camera": {
+    "source": {
+      "type": "registry",
+      "id": "cordova-plugin-camera@4.0.2"
+    },
+    "is_top_level": true,
+    "variables": {}
+  }
+}
