@@ -6,7 +6,11 @@
         {
             "label": "run-android",
             "type": "shell",
-            "command": " cordova run android"
+            "command": " cordova run android",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "label": "run-browser",
@@ -21,11 +25,7 @@
         {
             "label": "build-browser",
             "type": "shell",
-            "command": " cordova build browser",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "command": " cordova build browser"
         }
     ]
 }
