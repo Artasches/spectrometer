@@ -17,9 +17,37 @@
     cropper: null,
     message: {
       imageBase64: null,
-      json: []
+      json: [],
+      position: {
+        lat: null,
+        lon: null
+      }
     },
     save: () => {
+      // send message
+      let send = () => {
+        $.ajax({
+          type: "POST",
+          url: "./api/",
+          data: {
+            method: 'set-specter',
+            image: app.message.imageBase64,
+            json: JSON.stringify(app.message.json),
+            author: 1,
+            lat: app.message.position.lat,
+            lon: app.message.position.lon,
+            object: object,
+            description: descr
+          }
+        }).done((resp) => {
+          console.log(resp);
+        }).fail((e) => {
+          console.warn(e);
+        });
+
+        app.cancel();
+      }
+
       // check title and description
       var object = app.el.formObject.value,
         descr = app.el.formDescr.value;
@@ -32,35 +60,17 @@
         return;
       }
       // check geolocation
-      var lat = null,
-        lon = null;
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          lat = position.coords.latitude;
-          lon = position.coords.longitude
-        });
-      }
-      // send message
-      $.ajax({
-        type: "POST",
-        url: "./api/",
-        data: {
-          method: 'set-specter',
-          image: app.message.imageBase64,
-          json: JSON.stringify(app.message.json),
-          author: 1,
-          lat: lat,
-          lon: lon,
-          object: object,
-          description: descr
-        }
-      }).done((resp) => {
-        console.log(resp);
-      }).fail((e) => {
-        console.warn(e);
-      });
 
-      app.cancel();
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          app.message.position.lat = position.coords.latitude;
+          app.message.position.lon = position.coords.longitude
+          send();
+        });
+      } else {
+        send();
+      }
+
     },
     cancel: () => {
       if (app.cropper) {
@@ -99,7 +109,6 @@
     },
     crop: () => {
       // new canvas
-      console.log(app.cropper)
       var canvas = app.cropper.getCroppedCanvas();
       app.message.imageBase64 = canvas.toDataURL();
       app.message.json = [];
@@ -145,16 +154,13 @@
       var ctx = app.el.canvas.getContext('2d');
       app.el.canvas.width = app.el.video.videoWidth;
       app.el.canvas.height = app.el.video.videoHeight;
-      console.log('take...', app.el.canvas)
       ctx.drawImage(app.el.video, 0, 0, app.el.canvas.width, app.el.canvas.height);
-      console.log('picture taken')
       // get specter position
       app.cropper = new Cropper(app.el.canvas, {
         scalable: false,
         zoomable: false,
         viewMode: 3
       });
-      console.log(app.cropper)
       app.el.video.classList.add('hidden');
       app.el.btnTake.classList.add('hidden');
       app.el.btnCrop.classList.remove('hidden');
@@ -162,9 +168,7 @@
     },
     videoInit: () => {
       app.mediaSource.addEventListener('sourceopen', (event) => {
-        console.log('MediaSource opened');
         app.sourceBuffer = app.mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
-        console.log('Source buffer: ', app.sourceBuffer);
       }, false);
 
       var isSecureOrigin = location.protocol === 'https:' || location.hostname === 'localhost';
@@ -179,12 +183,11 @@
           video: true
         })
         .then(stream => {
-          console.log('getUserMedia() got stream: ', stream);
           window.stream = stream;
           app.el.video.srcObject = stream;
         })
         .catch(error => {
-          console.log('navigator.getUserMedia error: ', error);
+          console.warn('navigator.getUserMedia error: ', error);
         });
     },
     init: () => {
