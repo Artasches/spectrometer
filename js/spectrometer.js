@@ -1,18 +1,20 @@
 (() => {
-  const app = {
+  var app = {
     el: {
       video: document.querySelector('#video'),
       canvas: document.querySelector('#canvas'),
       btnTake: document.querySelector('#take'),
       btnCrop: document.querySelector('#crop'),
+      btnSave: document.querySelector('#save'),
     },
     mediaSource: new MediaSource(),
     sourceBuffer: null,
     cropper: null,
-    handleSourceOpen: (event) => {
-      console.log('MediaSource opened');
-      app.sourceBuffer = app.mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
-      console.log('Source buffer: ', app.sourceBuffer);
+    save: () => {
+      app.el.btnSave.classList.toggle('hidden');
+      app.el.video.classList.toggle('hidden');
+      app.el.btnTake.classList.toggle('hidden');
+      app.el.canvas.classList.toggle('hidden');
     },
     rgbToHsl: (r, g, b) => {
       r /= 255, g /= 255, b /= 255;
@@ -42,33 +44,32 @@
       var canvas = app.cropper.getCroppedCanvas();
       var ctx = canvas.getContext('2d');
       // app canvas
-      app.el.canvas.width = 360;
-      app.el.canvas.height = 1;
       var ctx2 = app.el.canvas.getContext('2d');
+      app.el.canvas.width = canvas.width; //360;
+      app.el.canvas.height = 1;
       ctx2.fillStyle = "black";
       ctx2.fillRect(0, 0, 360, 1);
-      var imageData = ctx2.createImageData(360, 1);
 
-      var arr = []
+
       for (var i = 0; i < canvas.width; i++) {
         var e = ctx.getImageData(i, canvas.height / 2, 1, 1);
-        var h = parseInt(app.rgbToHsl(e.data[0], e.data[1], e.data[2]).h * 360);
-        imageData.data[h] = e.data[0]
-        imageData.data[h + 1] = e.data[1]
-        imageData.data[h + 2] = e.data[2]
-        imageData.data[h + 3] = e.data[3]
-
-        ctx2.putImageData(imageData, h, 0);
-        arr.push(h)
+        var imageData = ctx2.createImageData(1, 1);
+        imageData.data[0] = e.data[0]
+        imageData.data[1] = e.data[1]
+        imageData.data[2] = e.data[2]
+        imageData.data[3] = e.data[3]
+        // var h = parseInt(app.rgbToHsl(e.data[0], e.data[1], e.data[2]).h * 360);
+        // ctx2.putImageData(imageData, h, 0);
+        ctx2.putImageData(imageData, i, 0);
       }
-      console.log(arr.sort())
-
 
       ctx2.putImageData(imageData, 0, 0)
 
       app.el.canvas.classList.toggle('hidden');
       app.cropper.destroy();
       app.cropper = null;
+      app.el.btnCrop.classList.toggle('hidden');
+      app.el.btnSave.classList.toggle('hidden');
     },
     takePicture: () => {
       // take picture
@@ -88,8 +89,12 @@
       app.el.btnTake.classList.toggle('hidden');
       app.el.btnCrop.classList.toggle('hidden');
     },
-    init: () => {
-      app.mediaSource.addEventListener('sourceopen', app.handleSourceOpen, false);
+    videoInit: () => {
+      app.mediaSource.addEventListener('sourceopen', (event) => {
+        console.log('MediaSource opened');
+        app.sourceBuffer = app.mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
+        console.log('Source buffer: ', app.sourceBuffer);
+      }, false);
 
       var isSecureOrigin = location.protocol === 'https:' || location.hostname === 'localhost';
       if (!isSecureOrigin) {
@@ -99,7 +104,7 @@
 
       navigator.mediaDevices
         .getUserMedia({
-          audio: true,
+          // audio: true,
           video: true
         })
         .then(stream => {
@@ -110,9 +115,13 @@
         .catch(error => {
           console.log('navigator.getUserMedia error: ', error);
         });
+    },
+    init: () => {
+      app.videoInit();
 
       app.el.btnTake.addEventListener('click', app.takePicture)
       app.el.btnCrop.addEventListener('click', app.crop)
+      app.el.btnSave.addEventListener('click', app.save)
     }
   }
   app.init();
