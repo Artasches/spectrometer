@@ -7,13 +7,58 @@
       btnCrop: document.querySelector('#crop'),
       btnSave: document.querySelector('#save'),
       btnCancel: document.querySelector('#cancel'),
+      form: document.querySelector('#form'),
+      formObject: document.querySelector('#object'),
+      formDescr: document.querySelector('#descr'),
+      snackbar: document.querySelector('#snackbar'),
     },
     mediaSource: new MediaSource(),
     sourceBuffer: null,
     cropper: null,
-    imageBase64: null,
+    message: {
+      imageBase64: null,
+      json: []
+    },
     save: () => {
-      console.log(app.imageBase64)
+      // check title and description
+      var object = app.el.formObject.value,
+        descr = app.el.formDescr.value;
+      if (!object.length) {
+        app.el.snackbar.MaterialSnackbar.showSnackbar({
+          message: 'Please describe the subject of the survey',
+          timeout: 5000
+        });
+        setTimeout(() => { app.el.formObject.focus() }, 100);
+        return;
+      }
+      // check geolocation
+      var lat = null,
+        lon = null;
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          lat = position.coords.latitude;
+          lon = position.coords.longitude
+        });
+      }
+      // send message
+      $.ajax({
+        type: "POST",
+        url: "./api/",
+        data: {
+          method: 'set-specter',
+          image: app.message.imageBase64,
+          json: JSON.stringify(app.message.json),
+          author: 1,
+          lat: lat,
+          lon: lon,
+          object: object,
+          description: descr
+        }
+      }).done((resp) => {
+        console.log(resp);
+      }).fail((e) => {
+        console.warn(e);
+      });
 
       app.cancel();
     },
@@ -27,6 +72,7 @@
       app.el.btnTake.classList.remove('hidden');
       app.el.btnCancel.classList.add('hidden');
       app.el.btnCrop.classList.add('hidden');
+      app.el.form.classList.add('hidden');
     },
     rgbToHsl: (r, g, b) => {
       r /= 255, g /= 255, b /= 255;
@@ -55,7 +101,8 @@
       // new canvas
       console.log(app.cropper)
       var canvas = app.cropper.getCroppedCanvas();
-      app.imageBase64 = canvas.toDataURL();
+      app.message.imageBase64 = canvas.toDataURL();
+      app.message.json = [];
       var ctx = canvas.getContext('2d');
 
       // app canvas
@@ -65,7 +112,6 @@
       ctx2.fillStyle = "black";
       ctx2.fillRect(0, 0, 360, 1);
 
-
       for (var i = 0; i < canvas.width; i++) {
         var e = ctx.getImageData(i, canvas.height / 2, 1, 1);
         var imageData = ctx2.createImageData(1, 1);
@@ -74,17 +120,25 @@
         imageData.data[2] = e.data[2]
         imageData.data[3] = e.data[3]
         // var h = parseInt(app.rgbToHsl(e.data[0], e.data[1], e.data[2]).h * 360);
-        // ctx2.putImageData(imageData, h, 0);
-        ctx2.putImageData(imageData, i, 0);
+        var h = i;
+        ctx2.putImageData(imageData, h, 0);
+        app.message.json.push({
+          average: parseInt((imageData.data[0] + imageData.data[1] + imageData.data[2]) / 3),
+          r: imageData.data[0],
+          g: imageData.data[1],
+          b: imageData.data[2],
+          pixel: h
+        });
       }
 
       ctx2.putImageData(imageData, 0, 0)
 
-      app.el.canvas.classList.toggle('hidden');
       app.cropper.destroy();
       app.cropper = null;
-      app.el.btnCrop.classList.toggle('hidden');
-      app.el.btnSave.classList.toggle('hidden');
+      app.el.canvas.classList.remove('hidden');
+      app.el.btnCrop.classList.add('hidden');
+      app.el.btnSave.classList.remove('hidden');
+      app.el.form.classList.remove('hidden');
     },
     takePicture: () => {
       // take picture
@@ -101,10 +155,10 @@
         viewMode: 3
       });
       console.log(app.cropper)
-      app.el.video.classList.toggle('hidden');
-      app.el.btnTake.classList.toggle('hidden');
-      app.el.btnCrop.classList.toggle('hidden');
-      app.el.btnCancel.classList.toggle('hidden');
+      app.el.video.classList.add('hidden');
+      app.el.btnTake.classList.add('hidden');
+      app.el.btnCrop.classList.remove('hidden');
+      app.el.btnCancel.classList.remove('hidden');
     },
     videoInit: () => {
       app.mediaSource.addEventListener('sourceopen', (event) => {

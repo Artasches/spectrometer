@@ -22,7 +22,7 @@ class Specter
     public $object = null;
     public $description = null;
 
-    function __construct($id, $json, $author, $image, $lat, $lon, $object, $description)
+    public function __construct($id, $json, $author, $image, $lat, $lon, $object, $description)
     {
         $this->orm = new ORM();
         if (!$this->orm->checkTableExist($this->tableName)) {
@@ -41,8 +41,7 @@ class Specter
             $this->description = $me[8];
         } else {
             $this->json = $json;
-            $this->author =$author;
-            $this->time = 'CURRENT_TIMESTAMP';
+            $this->author = $author;
             $this->image = $image;
             $this->lat = $lat;
             $this->lon = $lon;
@@ -56,12 +55,11 @@ class Specter
         return array(
             'json' => $this->json,
             'author_id' => $this->author,
-            'time' => 'CURRENT_TIMESTAMP',
             'image' => $this->image,
             'lat' => $this->lat,
             'lon' => $this->lon,
             'object' => $this->object,
-            'description' => $this->description
+            'description' => $this->description,
         );
     }
     private function createTable()

@@ -17,7 +17,7 @@ class Author
     public $login = null;
     public $password = null;
 
-    function __construct($id, $login, $password, $name)
+    public function __construct($id, $login, $password, $name)
     {
         $this->orm = new ORM();
         if (!$this->orm->checkTableExist($this->tableName)) {
@@ -42,7 +42,7 @@ class Author
         return array(
             'login' => $this->login,
             'pass_hash' => $this->password,
-            'name' => $this->name
+            'name' => $this->name,
         );
     }
 
