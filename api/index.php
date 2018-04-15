@@ -5,6 +5,7 @@ ini_set('default_socket_timeout', 300);
 
 header('Content-Type: application/json');
 include_once "Specter.php";
+include_once "ORM.php";
 
 $method = filter_input(INPUT_POST, 'method');
 $output = "Bad request";
@@ -25,7 +26,8 @@ switch ($method) {
 
         break;
     case 'get-specter':
-
+        $orm = new ORM();
+        $output = json_encode($orm->getRowsFromTable('specters'));
         break;
     case 'set-author':
 
@@ -34,6 +36,6 @@ switch ($method) {
 
         break;
     default:
-    header("HTTP/1.0 400 Bad request");
+        header("HTTP/1.0 400 Bad request");
 }
 echo $output;

@@ -15,7 +15,7 @@ class ORM
 {
     private $db = null;
 
-    function __construct()
+    public function __construct()
     {
         $this->db = new dbConnect();
     }
@@ -36,12 +36,12 @@ class ORM
     {
         /*
         $fields=array(
-       "id"=>INT(11),
-       "field1"=>'TEXT',
-       "field2"=>'LONG TEXT',
-       ...
-       )
-        * */
+        "id"=>INT(11),
+        "field1"=>'TEXT',
+        "field2"=>'LONG TEXT',
+        ...
+        )
+         * */
         $link = $this->db;
         $key_list = "";
         foreach ($fields as $key => $type) {
@@ -62,7 +62,7 @@ class ORM
     public function insertToTable($table, $class)
     {
         /*
-         $data=array(
+        $data=array(
         "id"=>1,
         "data1"=>'data1',
         "data2"=>'data2',
@@ -89,7 +89,11 @@ class ORM
         try {
             $link = $this->db;
             $resource = $link->query("SELECT * FROM `$table`");
-            return $link->fetch($resource);
+            $rows = array();
+            while ($r = mysqli_fetch_assoc($resource)) {
+                $rows[] = $r;
+            }
+          return $rows;
         } catch (mysqli_sql_exception $e) {
             return $e;
         }
@@ -117,6 +121,6 @@ class ORM
     {
         $link = $this->db;
         $resource = $link->query("SELECT * FROM `$table` LIMIT 1;");
-        return !($resource==false);
+        return !($resource == false);
     }
 }

@@ -35,7 +35,7 @@
 
 <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
+    <header class="mdl-layout__header mdl-layout__header--scroll">
       <div class="mdl-layout--large-screen-only mdl-layout__header-row">
       </div>
       <div class="mdl-layout--large-screen-only mdl-layout__header-row">
@@ -43,8 +43,9 @@
       </div>
       <div class="mdl-layout--large-screen-only mdl-layout__header-row">
       </div>
-      <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
+      <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
         <a href="#specters" class="mdl-layout__tab is-active">Specters</a>
+        <a href="#map" class="mdl-layout__tab">Map</a>
         <a href="#addspecter" class="mdl-layout__tab">Add specter</a>
       </div>
     </header>
@@ -85,23 +86,22 @@
 
         </section>
 
+        <br><br><br><br><br><br><br>
       </div>
       <div class="mdl-layout__tab-panel is-active" id="specters">
         <section class="section--center mdl-grid mdl-grid--no-spacing">
           <div class="mdl-card mdl-cell mdl-cell--12-col">
             <div class="mdl-card__supporting-text">
 
-
-
-
-
-
-
-
+              <ul class="specters-list" id="list"></ul>
 
             </div>
           </div>
         </section>
+      </div>
+
+      <div class="mdl-layout__tab-panel" id="map">
+          <div id="gmap"></div>
       </div>
 
     </main>
@@ -110,6 +110,8 @@
     <div class="mdl-snackbar__text"></div>
     <button class="mdl-snackbar__action" type="button"></button>
   </div>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvGnKY6lyFOVvMw5yf9V3bDJiAgC0xSL4"></script>
   <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
   <script src="./node_modules/jquery/dist/jquery.min.js"></script>
   <script src="./node_modules/webrtc-adapter/out/adapter.js"></script>
