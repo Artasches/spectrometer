@@ -91,6 +91,8 @@
         $.ajax({
           type: "POST",
           url: api,
+          crossDomain: true,
+          dataType: 'jsonp',
           data: {
             method: 'set-specter',
             image: app.message.imageBase64,

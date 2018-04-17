@@ -3,7 +3,9 @@ ini_set('max_input_vars', 1000000);
 ini_set('mysql.connect_timeout', 300);
 ini_set('default_socket_timeout', 300);
 
+header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
+
 include_once "Specter.php";
 include_once "ORM.php";
 
