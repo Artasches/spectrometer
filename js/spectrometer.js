@@ -1,4 +1,5 @@
 (() => {
+  var api = 'http://artik.me/spectrometer/api/'; // './api/'
   var app = {
     el: {
       video: document.querySelector('#video'),
@@ -89,7 +90,7 @@
       let send = () => {
         $.ajax({
           type: "POST",
-          url: "./api/",
+          url: api,
           data: {
             method: 'set-specter',
             image: app.message.imageBase64,
@@ -268,7 +269,7 @@
     loadSpecters: () => {
       $.ajax({
         type: "POST",
-        url: "./api/",
+        url: api,
         data: {
           method: 'get-specter',
         }
