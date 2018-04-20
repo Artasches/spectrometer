@@ -1,7 +1,8 @@
 {
-  "require": {},
-  "require-dev": {
-    "heroku/heroku-buildpack-php": "*",
+  "require": {
     "php-heroku-client/php-heroku-client": "*"
+  },
+  "require-dev": {
+    "heroku/heroku-buildpack-php": "*"
   }
 }
