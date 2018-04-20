@@ -1,6 +1,6 @@
 (() => {
   var app = {
-    api: 'http://artik.me/spectrometer/api/', // './api/'
+    api: './api/',
     el: {
       video: document.querySelector('#video'),
       canvas: document.querySelector('#canvas'),
