@@ -5,9 +5,7 @@ header('Content-Type: application/json');
 
 require_once '../vendor/autoload.php';
 
-use HerokuClient\Client as HerokuClient;
-
-$heroku = new HerokuClient();
+$heroku = new HerokuClient\Client();
 // $heroku = new HerokuClient([
 //     'apiKey' => 'be4d186c-d7f5-4bf0-b71b-9ff84b450783',
 //     'curlOptions' => [
