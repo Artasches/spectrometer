@@ -1,6 +1,19 @@
 (() => {
   var app = {
-    api: './api/',
+    api: './api/redirect.php', // redirect.php
+    ajax: (options, data, successCallback, failCallback) => {
+      var xhr = new XMLHttpRequest();
+      xhr.open(options.method, options.url || app.api, true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+          successCallback();
+        } else {
+          failCallback();
+        };
+      };
+      xhr.send(JSON.stringify(data));
+    },
     el: {
       video: document.querySelector('#video'),
       canvas: document.querySelector('#canvas'),
@@ -76,7 +89,7 @@
       if (!Array.isArray(resp)) {
         resp = [resp];
       }
-      app.specters = resp.map(item => {
+      var specters = resp.map(item => {
         item.id = parseInt(item.id);
         item.author_id = parseInt(item.author_id);
         item.lat = parseFloat(item.lat);
@@ -84,36 +97,38 @@
         // item.time = new Date(item.time);
         return item;
       });
+      app.specters = app.specters.concat(specters);
+    },
+    sendSpecter: () => {
+      console.log('ajax!')
+      $.ajax({
+        type: "POST",
+        url: app.api,
+        // crossDomain: true,
+        // dataType: 'jsonp',
+        data: {
+          method: 'set-specter',
+          image: app.message.imageBase64,
+          json: JSON.stringify(app.message.json),
+          // TODO: real author id
+          author: 1,
+          lat: app.message.position.lat,
+          lon: app.message.position.lon,
+          object: app.el.formObject.value,
+          description: app.el.formDescr.value
+        }
+      }).done((resp) => {
+        console.log(resp);
+        app.specterCallback(resp);
+        app.renderSpecters();
+      }).fail((e) => {
+        console.warn(e);
+      });
+      app.cancel();
     },
     save: () => {
       // send message
-      let send = () => {
-        $.ajax({
-          type: "POST",
-          url: app.api,
-          crossDomain: true,
-          dataType: 'jsonp',
-          data: {
-            method: 'set-specter',
-            image: app.message.imageBase64,
-            json: JSON.stringify(app.message.json),
-            // TODO: real author id
-            author: 1,
-            lat: app.message.position.lat,
-            lon: app.message.position.lon,
-            object: object,
-            description: descr
-          }
-        }).done((resp) => {
-          console.log(resp);
-          app.specterCallback(resp);
-          app.renderSpecters();
-        }).fail((e) => {
-          console.warn(e);
-        });
-
-        app.cancel();
-      }
+      console.log('send-msg')
 
       // check title and description
       var object = app.el.formObject.value,
@@ -126,18 +141,20 @@
         setTimeout(() => { app.el.formObject.focus() }, 100);
         return;
       }
+      console.log('ok')
       // check geolocation
-
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(position => {
           app.message.position.lat = position.coords.latitude;
           app.message.position.lon = position.coords.longitude
-          send();
+          console.log(app.message)
+          app.sendSpecter();
         });
       } else {
-        send();
+        console.log('not geo')
+        app.sendSpecter();
       }
-
+      console.log('out?')
     },
     cancel: () => {
       if (app.cropper) {
