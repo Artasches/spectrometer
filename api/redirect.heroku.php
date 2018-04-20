@@ -1,9 +1,9 @@
 <?php
-// ini_set('max_input_vars', 1000000);
-// header('Access-Control-Allow-Origin: *');
-// header('Content-Type: application/json');
+ini_set('max_input_vars', 1000000);
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json');
 
-// require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 // use HerokuClient\Client as HerokuClient;
 
