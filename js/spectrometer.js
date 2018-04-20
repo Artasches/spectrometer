@@ -1,6 +1,6 @@
 (() => {
   var app = {
-    api: './api/redirect.php', // redirect.php
+    api: './api/redirect.heroku.php', // redirect.php
     ajax: (options, data, successCallback, failCallback) => {
       var xhr = new XMLHttpRequest();
       xhr.open(options.method, options.url || app.api, true);
