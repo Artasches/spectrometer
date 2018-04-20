@@ -94,7 +94,7 @@
         item.author_id = parseInt(item.author_id);
         item.lat = parseFloat(item.lat);
         item.lon = parseFloat(item.lon);
-        // item.time = new Date(item.time);
+        item.time = item.time || new Date().toISOString();
         return item;
       });
       app.specters = app.specters.concat(specters);
