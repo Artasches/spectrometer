@@ -134,6 +134,7 @@
           chart.draw(data, options);
 
           if (item.lat && item.lon) {
+            map.style.display = "block";
             var gmap = new google.maps.Map(map, {
               center: { lat: item.lat, lng: item.lon },
               zoom: 10,
@@ -145,6 +146,8 @@
               map: gmap,
               title: item.object
             });
+          } else {
+            map.style.display = "none";
           }
 
           dialog.showModal();
