@@ -287,13 +287,15 @@
         // var h = parseInt(app.rgbToHsl(e.data[0], e.data[1], e.data[2]).h * 360);
         var h = i;
         ctx2.putImageData(imageData, h, 0);
-        app.message.json.push({
-          average: parseInt((imageData.data[0] + imageData.data[1] + imageData.data[2]) / 3),
+        var p = {
           r: (imageData.data[0] / 255).toFixed(2),
           g: (imageData.data[1] / 255).toFixed(2),
           b: (imageData.data[2] / 255).toFixed(2),
+          average: 0,
           pixel: h
-        });
+        }
+        p.average = parseInt((p.r + p.g + p.b) / 3);
+        app.message.json.push(p);
       }
 
       ctx2.putImageData(imageData, 0, 0)
