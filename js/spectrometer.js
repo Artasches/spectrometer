@@ -111,7 +111,7 @@
           image.appendChild(img);
 
           var arraytable = ar.map(x => {
-            return [x.pixel, parseFloat(x.r * 100), parseFloat(x.g * 100), parseFloat(x.b * 100), x.average]
+            return [x.pixel, parseFloat(x.r * 100), parseFloat(x.g * 100), parseFloat(x.b * 100), parseFloat(x.average * 100)]
           });
           arraytable.unshift(['Pixel', 'Red', 'Green', 'Blue', 'Average']);
           var width = window.innerWidth * 0.7 > 720 ? 720 : window.innerWidth * 0.7;
