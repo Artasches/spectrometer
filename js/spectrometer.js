@@ -107,6 +107,7 @@
           img.src = canvas.toDataURL("image/png");
           img.width = 640;
           img.height = 100;
+          image.innerHTML = '';
           image.appendChild(img);
 
           var arraytable = ar.map(x => {
