@@ -113,7 +113,7 @@
             return [x.pixel, parseFloat(x.r * 100), parseFloat(x.g * 100), parseFloat(x.b * 100), x.average]
           });
           arraytable.unshift(['Pixel', 'Red', 'Green', 'Blue', 'Average']);
-
+          var width = window.innerWidth * 0.7 > 720 ? 720 : window.innerWidth * 0.7;
           var data = google.visualization.arrayToDataTable(arraytable);
           var options = {
             vAxis: {
@@ -126,8 +126,8 @@
             },
             // legend: { position: 'bottom' },
             colors: ['#f00', '#0f0', '#00f', '#aaa'],
-            width: window.innerWidth * 0.7,
-            height: window.innerWidth * 0.3
+            width: width,
+            height: width / 2
           };
           var chart = new google.visualization.LineChart(graph);
           chart.draw(data, options);
