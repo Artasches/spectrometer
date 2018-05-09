@@ -1,6 +1,6 @@
 (() => {
   var app = {
-    api: './api/redirect.heroku.php', // redirect.php
+    api: './api/redirect.heroku.php',//'/api/index.php'
     ajax: (options, data, successCallback, failCallback) => {
       var xhr = new XMLHttpRequest();
       xhr.open(options.method, options.url || app.api, true);
@@ -81,6 +81,74 @@
         content.appendChild(descr);
         content.appendChild(time);
         li.appendChild(content);
+
+        li.addEventListener('click', function () {
+          var dialog = document.querySelector('dialog');
+          if (!dialog.showModal) {
+            dialogPolyfill.registerDialog(dialog);
+          }
+          dialog.querySelector('.close').addEventListener('click', function () {
+            dialog.close();
+          });
+          var title = document.querySelector('#dialog-title');
+          var image = document.querySelector('#dialog-image');
+          var graph = document.querySelector('#dialog-graph');
+          var map = document.querySelector('#dialog-map');
+          var author = document.querySelector('#dialog-author');
+          var date = document.querySelector('#dialog-date');
+          var descr = document.querySelector('#dialog-descr');
+
+          title.innerText = item.object;
+          author.innerText = 'Author: ' + item.author_id;
+          date.innerText = item.time;
+          descr.innerText = item.description;
+
+          var img = document.createElement('img');
+          img.src = canvas.toDataURL("image/png");
+          img.width = 640;
+          img.height = 100;
+          image.appendChild(img);
+
+          var arraytable = ar.map(x => {
+            return [x.pixel, parseFloat(x.r * 100), parseFloat(x.g * 100), parseFloat(x.b * 100), x.average]
+          });
+          arraytable.unshift(['Pixel', 'Red', 'Green', 'Blue', 'Average']);
+
+          var data = google.visualization.arrayToDataTable(arraytable);
+          var options = {
+            vAxis: {
+              title: 'Intensity (%)',
+              viewWindow: {
+                min: -10,
+                max: 100
+              },
+              ticks: [0, 25, 50, 75, 100]
+            },
+            // legend: { position: 'bottom' },
+            colors: ['#f00', '#0f0', '#00f', '#aaa'],
+            width: window.innerWidth * 0.7,
+            height: window.innerWidth * 0.3
+          };
+          var chart = new google.visualization.LineChart(graph);
+          chart.draw(data, options);
+
+          if (item.lat && item.lon) {
+            var gmap = new google.maps.Map(map, {
+              center: { lat: item.lat, lng: item.lon },
+              zoom: 10,
+              mapTypeControl: false,
+              scrollwheel: false
+            });
+            new google.maps.Marker({
+              position: { lat: item.lat, lng: item.lon },
+              map: gmap,
+              title: item.object
+            });
+          }
+
+          dialog.showModal();
+        })
+
         app.el.listSpecters.appendChild(li);
       });
 
@@ -203,7 +271,7 @@
       app.el.canvas.width = canvas.width; //360;
       app.el.canvas.height = 1;
       ctx2.fillStyle = "black";
-      ctx2.fillRect(0, 0, 360, 1);
+      ctx2.fillRect(0, 0, app.el.canvas.width, 1);
 
       for (var i = 0; i < canvas.width; i++) {
         var e = ctx.getImageData(i, canvas.height / 2, 1, 1);
@@ -309,6 +377,10 @@
       app.el.btnCrop.addEventListener('click', app.crop)
       app.el.btnSave.addEventListener('click', app.save)
       app.el.btnCancel.addEventListener('click', app.cancel)
+
+      setTimeout(() => {
+        google.charts.load('current', { 'packages': ['corechart'] });
+      }, 500)
     }
   }
   app.init();

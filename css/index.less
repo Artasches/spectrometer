@@ -83,6 +83,41 @@
     background: #333 !important;
 }
 
+.mdl-dialog {
+    width: 90%;
+    max-width: 768px;
+    img {
+        display: block;
+        width: 100%;
+        height: 100px;
+    }
+    .mdl-dialog__content {
+        >div {
+            margin-bottom: 15px;
+        }
+    }
+}
+
+#dialog-date {
+    float: right;
+}
+
+#dialog-author {
+    float: left;
+}
+
+#dialog-descr {
+    &:before {
+        content: '';
+        clear: both;
+        display: block;
+    }
+}
+
+#dialog-map {
+    height: 50vh;
+}
+
 @media(min-width:860px) {
     .media-container {
         height: 585px;
